@@ -142,8 +142,8 @@ Another patient's appointment time must never be spoken. I measured what this bu
 **5. The simulated caller is a witness, not only an actor.** Besides its line, the caller reports
 whether it just agreed to a specific booking and whether it hung up. So "did she book before the
 caller said yes to that exact slot?" is checked from the caller's own account, not guessed from
-wording. The baseline did this once: it read back a slot, asked for the reason for the visit, and
-booked as soon as the caller described her sore throat.
+wording. In one baseline call Ava asked which provider the caller wanted, the caller said "either
+one is fine", and Ava picked Dr. Raman and booked. The caller never heard who, and never said yes.
 
 **6. The improvement is a typed patch, and the gate decides, not the improver.** The improver
 (Sonnet 5.5) sees failures from the train split only. It can add, edit or remove at most three

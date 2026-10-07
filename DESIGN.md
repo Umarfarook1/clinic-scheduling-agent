@@ -45,8 +45,9 @@ failures come from mumbled dates, kids in the background and people who change t
 The loop proposes; someone who knows the clinic approves; the patch shadow-runs before it ships.
 
 **Where AI helped, where judgment overrode it.** Claude Code wrote most of the code and first drafts.
-Its first versions were often wrong in ways the score hid: a regex that flagged honest confirmations
-(it made the gate reject two good patches in a rehearsal), a rubric that would have punished explaining
-why to call 911, a slot search that silently dropped results. Each was caught by reading transcripts,
-not numbers, and fixed in code or in the eval rather than with more rules.
-[UMAR: one line on the calls you made yourself, then delete this line.]
+The calls were mine: a small model on Bedrock, invariants in code out of the loop's reach, grading state
+over transcripts, a strict consent check, and fixing tools in code rather than patching around them with
+rules. The first drafts were often wrong in ways the score hid: a regex that flagged honest
+confirmations (it made the gate reject two good patches in a rehearsal), a rubric that would have
+punished explaining why to call 911, a slot search that silently dropped results. Each was caught by
+reading transcripts, not numbers.

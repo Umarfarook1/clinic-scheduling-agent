@@ -208,16 +208,28 @@ read-back had named the wrong provider nobody would have caught it.
 
 ## How I used AI
 
-I built this with Claude Code (Claude Opus 5.5) as a pair programmer, and it did most of the
-typing: the code, the scenario cards and first drafts of these docs. Inside the project, models
-play four parts: Haiku 4.5 is the agent, Sonnet 4.6 plays the caller and the judge, Sonnet 5.5 is
-the improver, and gpt-oss-120b is the second-opinion judge.
+I used Claude Code (Claude Opus 5.5) as a pair programmer for most of the implementation: the
+code, the scenario cards and first drafts of these docs. Inside the project, models play four
+parts: Haiku 4.5 is the agent, Sonnet 4.6 plays the caller and the judge, Sonnet 5.5 is the
+improver, and gpt-oss-120b is the second-opinion judge.
 
-The first versions were often wrong in ways a green score hides. All seven items in the list
-above started as code or prompts that looked fine, and each one was caught by reading the calls
-behind a number instead of the number.
+The calls that shaped the project are mine:
 
-[UMAR: two or three lines in your words on the calls you made yourself, then delete this line.]
+- Run on AWS Bedrock with a small, fast model as the agent, because that is the model a phone call
+  can afford, and make the loop prove it can make a small model behave.
+- Keep the safety invariants in code where the loop cannot reach them. The loop edits the prompt
+  and nothing else.
+- Grade the clinic state and the tool trace, not the transcript, and give the judge only what code
+  cannot check.
+- Keep the consent check strict, even where a human reviewer might wave a call through.
+- Fix the slot search in code instead of letting the loop write a rule around it, and leave the
+  markdown strip out so the eval keeps seeing that failure.
+- Never show holdout to the improver, and re-record the whole run every time the harness changed,
+  so the replay always matches the code.
+
+The first drafts were often wrong in ways a green score hides. All seven items in the list above
+started as code or prompts that looked fine, and each one was caught by reading the calls behind a
+number instead of the number.
 
 ## With more time
 

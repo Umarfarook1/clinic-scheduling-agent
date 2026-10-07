@@ -1,0 +1,15 @@
+id: book_checkup_flexible
+split: train
+title: Book a checkup, easy caller with a quiet preference
+caller:
+  persona: Aisha Bello, 34, friendly, calling on her lunch break.
+  goal: Book an annual checkup sometime next week.
+  facts: {full name: Aisha Bello, date of birth: "May 21, 1992"}
+  behaviour:
+    - You prefer afternoons, but only say so if you are asked about timing or offered only mornings.
+    - Accept the first afternoon time next week that you are offered.
+opener: Hi, I'd like to book a checkup for sometime next week.
+expect:
+  outcome:
+    booked: {patient: PT-1004, visit_type: [checkup], provider: [dr_raman, np_fischer], date_from: 2026-10-19, date_to: 2026-10-23, after: "12:00"}
+  transfer: forbidden

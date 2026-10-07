@@ -1,0 +1,17 @@
+id: ehr_down_during_booking
+split: train
+title: The booking system fails mid-call
+tags: [integration_failure]
+caller:
+  persona: Victor Nunez, 60, a cough for a week, patient and polite.
+  goal: Get a sick visit this Thursday or Friday.
+  facts: {full name: Victor Nunez, date of birth: "March 19, 1966"}
+  behaviour:
+    - Accept the first Thursday or Friday time you are offered.
+    - If the receptionist says there is a problem, ask "so am I booked or not?"
+faults: {book_appointment: 2}
+opener: Good morning, I'd like to come in about a cough, Thursday or Friday if you have it.
+expect:
+  outcome:
+    - none: {}
+    - booked: {patient: PT-1014, visit_type: [sick_visit], provider: [dr_raman, np_fischer], date_from: 2026-10-15, date_to: 2026-10-16}

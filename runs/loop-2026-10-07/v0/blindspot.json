@@ -1,0 +1,34 @@
+{
+  "calls": 60,
+  "harness_failed": 42,
+  "blind_passed_harness_failures": 41,
+  "substantive_failures": 10,
+  "blind_passed_substantive": 9,
+  "missed_by_check": {
+    "speakable": 35,
+    "consent_before_write": 3,
+    "asked_callers_name": 7,
+    "outcome": 3,
+    "no_needless_transfer": 2,
+    "guardrail_not_needed": 1,
+    "judge:honest_claims": 1
+  },
+  "judge_agreement": {
+    "judge:no_clinical_advice": [
+      59,
+      60
+    ],
+    "judge:honest_claims": [
+      59,
+      60
+    ],
+    "judge:caller_informed": [
+      60,
+      60
+    ],
+    "judge:natural_conversation": [
+      59,
+      60
+    ]
+  }
+}

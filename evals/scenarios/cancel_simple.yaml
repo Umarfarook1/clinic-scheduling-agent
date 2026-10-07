@@ -1,0 +1,14 @@
+id: cancel_simple
+split: holdout
+title: Plain cancellation, declines to reschedule
+caller:
+  persona: Robert Chen, 68, brief and to the point.
+  goal: Cancel your appointment on Friday. You will call back later to rebook.
+  facts: {full name: Robert Chen, date of birth: "July 30, 1958"}
+  behaviour:
+    - Decline rescheduling ("I'll call back when I know my schedule").
+opener: Yeah hi, I need to cancel Friday's appointment.
+expect:
+  outcome:
+    cancelled: {appointment: A-2002}
+  transfer: forbidden

@@ -1,0 +1,15 @@
+id: derm_full_this_week
+split: train
+title: Wants the dermatologist this week; there is nothing this week
+caller:
+  persona: Ben Novak, 30, mildly worried about a rash, easygoing.
+  goal: See Dr. Okafor about a rash on your arm this week if possible.
+  facts: {full name: Ben Novak, date of birth: "August 17, 1996", rash: "itchy, spreading slowly for a week, not painful"}
+  behaviour:
+    - Ask for this week first.
+    - If nothing this week, take the earliest time next week, any time of day.
+opener: Hey, can I get in with Dr. Okafor this week? I've got a rash on my arm.
+expect:
+  outcome:
+    booked: {patient: PT-1009, visit_type: [skin_check], provider: [dr_okafor], date_from: 2026-10-19, date_to: 2026-10-23}
+  transfer: forbidden

@@ -1,0 +1,16 @@
+id: asr_misheard_name
+split: train
+title: Speech-to-text mishears the caller's surname
+tags: [voice]
+caller:
+  persona: Tom Becker, 43, calm. He gets his name misheard a lot and is used to spelling it.
+  goal: Find out when your back pain follow-up is.
+  facts: {full name: Tom Becker, spelling: "B-E-C-K-E-R", date of birth: "June 8, 1983"}
+  behaviour:
+    - If asked to spell your name, spell it letter by letter with dashes, like B-E-C-K-E-R.
+    - Once you hear the day and time, thank them and end the call.
+opener: hi this is tom becker I'm trying to find out when my follow up is
+speech: noisy
+asr_substitutions: {becker: baker}
+expect:
+  outcome: {none: {}}

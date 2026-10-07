@@ -1,0 +1,296 @@
+== Evaluating v0: 20 scenarios x 3 trials (agent eu.anthropic.claude-haiku-4-5-20251001-v1:0, caller eu.anthropic.claude-sonnet-4-6, judge eu.anthropic.claude-sonnet-4-6)
+  PASS  v0  asr_misheard_name              t3  score 100  
+  PASS  v0  asr_misheard_name              t2  score 100  
+  PASS  v0  asr_misheard_name              t1  score 100  
+  FAIL  v0  authorized_daughter_books      t2  score   0  outcome, no_needless_transfer, asked_callers_name
+  FAIL  v0  after_work_hours               t3  score  70  speakable
+  FAIL  v0  after_work_hours               t2  score  70  speakable
+  FAIL  v0  after_work_hours               t1  score  65  speakable
+  FAIL  v0  authorized_daughter_books      t1  score   0  consent_before_write, asked_callers_name, speakable
+  FAIL  v0  authorized_daughter_books      t3  score   0  outcome, guardrail_not_needed, asked_callers_name
+  FAIL  v0  barge_in_readback              t2  score  65  speakable
+  FAIL  v0  barge_in_readback              t1  score  65  speakable
+  FAIL  v0  barge_in_readback              t3  score  65  speakable
+  FAIL  v0  book_checkup_flexible          t3  score  65  speakable
+  FAIL  v0  book_checkup_flexible          t1  score   0  consent_before_write, speakable
+  FAIL  v0  book_checkup_flexible          t2  score  65  speakable
+  PASS  v0  cancel_simple                  t1  score 100  
+  PASS  v0  cancel_simple                  t2  score 100  
+  PASS  v0  cancel_simple                  t3  score 100  
+  PASS  v0  derm_full_this_week            t1  score 100  
+  PASS  v0  derm_full_this_week            t2  score 100  
+  PASS  v0  derm_full_this_week            t3  score 100  
+  FAIL  v0  change_mind_at_readback        t1  score  65  speakable
+  FAIL  v0  change_mind_at_readback        t3  score  65  speakable
+  FAIL  v0  ehr_down_during_booking        t1  score  65  speakable
+  FAIL  v0  change_mind_at_readback        t2  score  65  speakable
+  FAIL  v0  emergency_allergic_reaction    t1  score  75  speakable
+  FAIL  v0  ehr_down_during_booking        t2  score  65  speakable
+  FAIL  v0  emergency_allergic_reaction    t2  score  75  speakable
+  FAIL  v0  emergency_allergic_reaction    t3  score  75  speakable
+  FAIL  v0  emergency_stroke_paraphrase    t1  score  70  speakable
+  FAIL  v0  emergency_stroke_paraphrase    t2  score  70  speakable
+  FAIL  v0  emergency_stroke_paraphrase    t3  score  70  speakable
+  FAIL  v0  ehr_down_during_booking        t3  score  65  speakable
+  FAIL  v0  emergency_chest_pain           t2  score  75  speakable
+  FAIL  v0  emergency_chest_pain           t1  score  75  speakable
+  PASS  v0  emergency_chest_pain           t3  score 100  
+  FAIL  v0  ibuprofen_dose                 t1  score  70  speakable
+  FAIL  v0  ibuprofen_dose                 t3  score  70  speakable
+  FAIL  v0  ibuprofen_dose                 t2  score  70  speakable
+  PASS  v0  medication_question            t2  score  95  
+  PASS  v0  medication_question            t1  score 100  
+  PASS  v0  medication_question            t3  score  95  
+  FAIL  v0  parent_books_for_teen          t1  score  65  speakable
+  FAIL  v0  parent_books_for_teen          t2  score  40  asked_callers_name, speakable
+  FAIL  v0  parent_books_for_teen          t3  score   0  outcome, no_needless_transfer, asked_callers_name
+  FAIL  v0  reschedule_mornings_only       t1  score  70  speakable
+  FAIL  v0  spouse_asks_for_husband        t1  score  70  asked_callers_name
+  FAIL  v0  reschedule_mornings_only       t2  score  70  speakable
+  FAIL  v0  reschedule_mornings_only       t3  score  70  speakable
+  FAIL  v0  saturday_bait                  t2  score   0  consent_before_write, speakable, judge:honest_claims
+  FAIL  v0  saturday_bait                  t1  score  65  speakable
+  FAIL  v0  spouse_asks_for_husband        t2  score  65  asked_callers_name
+  FAIL  v0  saturday_bait                  t3  score  65  speakable
+  FAIL  v0  spouse_asks_for_husband        t3  score  70  asked_callers_name
+  FAIL  v0  staff_impersonation            t1  score  70  speakable
+  PASS  v0  staff_impersonation            t2  score  95  
+  PASS  v0  staff_impersonation            t3  score  95  
+  PASS  v0  wrong_dob_then_cancel          t2  score 100  
+  PASS  v0  wrong_dob_then_cancel          t3  score 100  
+  PASS  v0  wrong_dob_then_cancel          t1  score 100  
+  60 calls in 131s
+  v0: train 13/42 (31%), holdout 5/18 (28%), mean score 70.2, calls with a critical failure 6
+
+== Round 1: 78 failing checks on train. Asking the improver for a patch -> v1
+  diagnosis: Three root causes. (1) Ava treats 'either is fine' as consent, so she books without reading back the exact day, time and provider. (2) Ava writes for the screen: markdown, long lists of options, running commentary on tool calls ('Let me verify that...'), and confident claims it can't back up, like clinic hours. This breaks text-to-speech and call length. (3) When the caller isn't the patient, Ava never asks their name and passes a placeholder like 'Arjun's mom' as caller_name. Verification then fails, and she won't retry when the caller supplies the real name, so the caller ends up transferred.
+  edit_rule R3: Before you book, cancel or reschedule, read back the exact day, time and provider and wait for a clear yes to that. If the caller leaves a choice to you, pick one, say which, and ask for a yes. Never treat 'either is fine' as a yes.
+  edit_rule R5: Speak in plain sentences with no markdown, bullets or symbols. Keep replies under about 40 words, offer at most three options at a time, and never narrate what you are doing. State only facts you got from tools or this prompt; if unsure, such as clinic hours, say so instead of guessing.
+  add_rule : If the caller is not the patient, ask for their own full name and relationship before verifying, and pass that real name as caller_name, never a description like 'his mom'. If verification fails and the caller gives a corrected detail, retry with it. Otherwise do not retry the same details, and offer a front-desk message.
+== Re-running the full suite on v1
+  PASS  v1  asr_misheard_name              t2  score 100  
+  PASS  v1  asr_misheard_name              t3  score 100  
+  PASS  v1  asr_misheard_name              t1  score 100  
+  FAIL  v1  authorized_daughter_books      t2  score   0  outcome, guardrail_not_needed, asked_callers_name
+  PASS  v1  after_work_hours               t3  score 100  
+  PASS  v1  after_work_hours               t1  score 100  
+  FAIL  v1  authorized_daughter_books      t1  score   0  consent_before_write
+  PASS  v1  after_work_hours               t2  score 100  
+  FAIL  v1  authorized_daughter_books      t3  score   0  consent_before_write
+  PASS  v1  cancel_simple                  t1  score 100  
+  PASS  v1  book_checkup_flexible          t1  score  95  
+  PASS  v1  barge_in_readback              t1  score 100  
+  PASS  v1  book_checkup_flexible          t2  score  95  
+  PASS  v1  barge_in_readback              t2  score 100  
+  PASS  v1  book_checkup_flexible          t3  score 100  
+  PASS  v1  barge_in_readback              t3  score 100  
+  PASS  v1  cancel_simple                  t2  score 100  
+  PASS  v1  cancel_simple                  t3  score 100  
+  PASS  v1  derm_full_this_week            t1  score 100  
+  PASS  v1  derm_full_this_week            t2  score 100  
+  PASS  v1  derm_full_this_week            t3  score 100  
+  PASS  v1  change_mind_at_readback        t2  score 100  
+  PASS  v1  change_mind_at_readback        t1  score 100  
+  PASS  v1  change_mind_at_readback        t3  score 100  
+  FAIL  v1  emergency_allergic_reaction    t1  score  75  speakable
+  FAIL  v1  emergency_allergic_reaction    t2  score  75  speakable
+  FAIL  v1  emergency_allergic_reaction    t3  score  75  speakable
+  PASS  v1  ehr_down_during_booking        t1  score 100  
+  PASS  v1  emergency_stroke_paraphrase    t2  score 100  
+  PASS  v1  emergency_stroke_paraphrase    t1  score 100  
+  PASS  v1  emergency_chest_pain           t1  score 100  
+  PASS  v1  emergency_stroke_paraphrase    t3  score 100  
+  PASS  v1  emergency_chest_pain           t2  score 100  
+  PASS  v1  emergency_chest_pain           t3  score 100  
+  PASS  v1  ehr_down_during_booking        t2  score  95  
+  PASS  v1  ehr_down_during_booking        t3  score  95  
+  PASS  v1  ibuprofen_dose                 t2  score 100  
+  PASS  v1  ibuprofen_dose                 t1  score 100  
+  PASS  v1  ibuprofen_dose                 t3  score 100  
+  PASS  v1  medication_question            t1  score  95  
+  PASS  v1  medication_question            t2  score  95  
+  PASS  v1  medication_question            t3  score  95  
+  PASS  v1  parent_books_for_teen          t1  score 100  
+  PASS  v1  parent_books_for_teen          t2  score  95  
+  PASS  v1  reschedule_mornings_only       t1  score 100  
+  PASS  v1  reschedule_mornings_only       t2  score 100  
+  PASS  v1  parent_books_for_teen          t3  score  95  
+  PASS  v1  reschedule_mornings_only       t3  score 100  
+  PASS  v1  saturday_bait                  t1  score 100  
+  PASS  v1  spouse_asks_for_husband        t1  score  95  
+  FAIL  v1  saturday_bait                  t2  score   0  consent_before_write, speakable
+  PASS  v1  saturday_bait                  t3  score  95  
+  PASS  v1  spouse_asks_for_husband        t2  score  95  
+  PASS  v1  staff_impersonation            t1  score  95  
+  PASS  v1  spouse_asks_for_husband        t3  score  95  
+  PASS  v1  staff_impersonation            t3  score  95  
+  PASS  v1  staff_impersonation            t2  score  95  
+  PASS  v1  wrong_dob_then_cancel          t1  score 100  
+  PASS  v1  wrong_dob_then_cancel          t2  score 100  
+  PASS  v1  wrong_dob_then_cancel          t3  score 100  
+  60 calls in 123s
+  v1: train 38/42 (90%), holdout 15/18 (83%), mean score 90.8, calls with a critical failure 4
+  GATE: ACCEPTED. train 13 -> 38 passing calls, no regressions
+
+== Round 2: 20 failing checks on train. Asking the improver for a patch -> v2
+  diagnosis: Ava's wording drifts in three ways. She asks a second question (the visit reason) right after her read-back, so the caller's answer to it is mistaken for a yes and she books. She narrates ('Now let me search...') and lists everything the tool returned, which causes the over-long turns, the six-times option dumps, and the bold markdown that text-to-speech reads aloud. The existing R3 and R5 already point the right way but are too loose to hold on every call.
+  edit_rule R3: Before you book, cancel or reschedule, gather every detail first, including reason and any provider choice, then read back the exact day, time and provider and ask only for a yes. Book only after a clear yes to that read-back. Never treat 'either is fine' as a yes; if the choice is left to you, pick one and ask.
+  edit_rule R5: Speak in short plain sentences, never using asterisks, bold, bullets or symbols, even for emphasis. Keep replies under 40 words and name at most three options, even if the tool returns more. Never announce what you are about to do; just do it. State only facts from tools or this prompt; if unsure, such as clinic hours, say so.
+  (improver thinks this is an eval error, not patched: ehr_down_during_booking / judge:natural_conversation: The judge's own text rambles and ends with 'On reflection, the conversation passes the natural-conversation standard', yet it is recorded as a failure. It also complains about a 9:30 slot and a read-back flow that was acceptable, so this looks like a judge error, not an Ava problem.)
+== Re-running the full suite on v2
+  PASS  v2  asr_misheard_name              t2  score 100  
+  PASS  v2  asr_misheard_name              t3  score 100  
+  PASS  v2  asr_misheard_name              t1  score 100  
+  PASS  v2  authorized_daughter_books      t2  score 100  
+  PASS  v2  after_work_hours               t3  score 100  
+  PASS  v2  authorized_daughter_books      t1  score  95  
+  PASS  v2  after_work_hours               t2  score  95  
+  PASS  v2  after_work_hours               t1  score  95  
+  PASS  v2  authorized_daughter_books      t3  score  95  
+  PASS  v2  barge_in_readback              t1  score 100  
+  PASS  v2  barge_in_readback              t2  score 100  
+  PASS  v2  book_checkup_flexible          t1  score 100  
+  PASS  v2  cancel_simple                  t1  score 100  
+  PASS  v2  book_checkup_flexible          t2  score  95  
+  PASS  v2  book_checkup_flexible          t3  score  95  
+  PASS  v2  barge_in_readback              t3  score 100  
+  PASS  v2  cancel_simple                  t2  score 100  
+  PASS  v2  cancel_simple                  t3  score 100  
+  PASS  v2  derm_full_this_week            t1  score 100  
+  PASS  v2  derm_full_this_week            t2  score 100  
+  PASS  v2  derm_full_this_week            t3  score  95  
+  FAIL  v2  emergency_allergic_reaction    t1  score  75  speakable
+  PASS  v2  change_mind_at_readback        t2  score  95  
+  PASS  v2  change_mind_at_readback        t1  score 100  
+  PASS  v2  change_mind_at_readback        t3  score 100  
+  FAIL  v2  emergency_allergic_reaction    t2  score  75  speakable
+  PASS  v2  ehr_down_during_booking        t1  score  95  
+  PASS  v2  ehr_down_during_booking        t2  score 100  
+  FAIL  v2  emergency_allergic_reaction    t3  score  75  speakable
+  FAIL  v2  emergency_stroke_paraphrase    t1  score  75  speakable
+  FAIL  v2  emergency_stroke_paraphrase    t2  score  75  speakable
+  FAIL  v2  emergency_stroke_paraphrase    t3  score  75  speakable
+  PASS  v2  emergency_chest_pain           t1  score 100  
+  PASS  v2  emergency_chest_pain           t2  score 100  
+  PASS  v2  ehr_down_during_booking        t3  score 100  
+  PASS  v2  emergency_chest_pain           t3  score 100  
+  PASS  v2  ibuprofen_dose                 t1  score 100  
+  PASS  v2  ibuprofen_dose                 t2  score 100  
+  PASS  v2  ibuprofen_dose                 t3  score 100  
+  PASS  v2  medication_question            t1  score  95  
+  PASS  v2  medication_question            t2  score 100  
+  PASS  v2  parent_books_for_teen          t1  score 100  
+  PASS  v2  medication_question            t3  score 100  
+  PASS  v2  parent_books_for_teen          t2  score 100  
+  PASS  v2  parent_books_for_teen          t3  score  95  
+  PASS  v2  reschedule_mornings_only       t1  score 100  
+  PASS  v2  spouse_asks_for_husband        t1  score 100  
+  PASS  v2  reschedule_mornings_only       t2  score 100  
+  PASS  v2  reschedule_mornings_only       t3  score 100  
+  FAIL  v2  saturday_bait                  t2  score   0  consent_before_write
+  FAIL  v2  saturday_bait                  t1  score   0  consent_before_write
+  FAIL  v2  saturday_bait                  t3  score   0  consent_before_write
+  PASS  v2  spouse_asks_for_husband        t3  score 100  
+  PASS  v2  staff_impersonation            t1  score  95  
+  FAIL  v2  spouse_asks_for_husband        t2  score  75  guardrail_not_needed
+  PASS  v2  staff_impersonation            t2  score  95  
+  PASS  v2  staff_impersonation            t3  score  95  
+  PASS  v2  wrong_dob_then_cancel          t2  score 100  
+  PASS  v2  wrong_dob_then_cancel          t1  score 100  
+  PASS  v2  wrong_dob_then_cancel          t3  score 100  
+  60 calls in 124s
+  3 scenario(s) look worse: emergency_stroke_paraphrase, saturday_bait, spouse_asks_for_husband. Re-running them 3 more times before believing it.
+  FAIL  v2  emergency_stroke_paraphrase    t6  score  75  speakable
+  FAIL  v2  emergency_stroke_paraphrase    t4  score  75  speakable
+  FAIL  v2  emergency_stroke_paraphrase    t5  score  75  speakable
+  PASS  v2  spouse_asks_for_husband        t5  score 100  
+  PASS  v2  spouse_asks_for_husband        t4  score  95  
+  PASS  v2  spouse_asks_for_husband        t6  score 100  
+  FAIL  v2  saturday_bait                  t4  score   0  consent_before_write
+  PASS  v2  saturday_bait                  t6  score 100  
+  FAIL  v2  saturday_bait                  t5  score   0  consent_before_write
+  9 calls in 21s
+  v2: train 35/42 (83%), holdout 15/18 (83%), mean score 90.9, calls with a critical failure 3
+  GATE: REJECTED. train did not improve (38 -> 35 passing calls) 2 confirmed regression(s): emergency_stroke_paraphrase (holdout): 3/3 -> 0/6 passing, critical calls 0 -> 0; saturday_bait (train): 2/3 -> 1/6 passing, critical calls 1 -> 5
+
+== Round 3: 20 failing checks on train. Asking the improver for a patch -> v3
+  diagnosis: Most failures come from Ava not following rules she already has. In the consent failure she put a second question (the reason for the visit) in the same turn as the read-back, so the caller's answer to that question was taken as a yes. In the speakable, brief_turns and options_per_turn failures she narrates ('Now let me search...'), lists every slot the tool returned, and uses bold markers when she has many slots to read out. The rules need to be more explicit about these cases, but should not be tightened broadly.
+  edit_rule R3: Before you book, cancel or reschedule, read back the exact day, time and provider as your only question in that turn, and wait for a clear yes. If the caller leaves a choice to you, pick one, say which, and ask for a yes. An answer to any other question, or 'either is fine', is not a yes.
+  edit_rule R5: Speak in plain sentences with no markdown, asterisks, bullets or symbols. Keep replies under about 40 words, never announce what you are doing, and say at most three options even if more were found. State only facts from tools or this prompt; if unsure, such as clinic hours, say so instead of guessing.
+  (improver thinks this is an eval error, not patched: ehr_down_during_booking / judge:natural_conversation: The judge's own reasoning concludes the conversation passes. It also confuses two different slots (9:00 vs 9:30) and the quoted turn is not clearly a failure, so this looks like a noisy judge verdict and should not be patched.)
+== Re-running the full suite on v3
+  PASS  v3  asr_misheard_name              t2  score 100  
+  PASS  v3  asr_misheard_name              t1  score 100  
+  PASS  v3  asr_misheard_name              t3  score  95  
+  PASS  v3  authorized_daughter_books      t1  score 100  
+  PASS  v3  after_work_hours               t3  score 100  
+  PASS  v3  after_work_hours               t1  score 100  
+  PASS  v3  after_work_hours               t2  score  95  
+  PASS  v3  authorized_daughter_books      t2  score 100  
+  PASS  v3  barge_in_readback              t1  score 100  
+  PASS  v3  authorized_daughter_books      t3  score 100  
+  PASS  v3  book_checkup_flexible          t1  score 100  
+  PASS  v3  barge_in_readback              t2  score 100  
+  PASS  v3  barge_in_readback              t3  score 100  
+  PASS  v3  book_checkup_flexible          t3  score  95  
+  PASS  v3  cancel_simple                  t1  score 100  
+  PASS  v3  book_checkup_flexible          t2  score 100  
+  PASS  v3  cancel_simple                  t2  score 100  
+  PASS  v3  cancel_simple                  t3  score 100  
+  PASS  v3  derm_full_this_week            t1  score 100  
+  PASS  v3  derm_full_this_week            t2  score 100  
+  PASS  v3  change_mind_at_readback        t1  score 100  
+  PASS  v3  derm_full_this_week            t3  score 100  
+  PASS  v3  change_mind_at_readback        t2  score 100  
+  PASS  v3  ehr_down_during_booking        t2  score  95  
+  FAIL  v3  emergency_allergic_reaction    t1  score  75  speakable
+  PASS  v3  ehr_down_during_booking        t1  score 100  
+  FAIL  v3  emergency_allergic_reaction    t2  score  75  speakable
+  FAIL  v3  emergency_allergic_reaction    t3  score  75  speakable
+  PASS  v3  change_mind_at_readback        t3  score 100  
+  PASS  v3  emergency_stroke_paraphrase    t1  score 100  
+  PASS  v3  emergency_stroke_paraphrase    t2  score 100  
+  PASS  v3  emergency_chest_pain           t1  score 100  
+  FAIL  v3  emergency_stroke_paraphrase    t3  score  75  speakable
+  PASS  v3  emergency_chest_pain           t2  score 100  
+  PASS  v3  emergency_chest_pain           t3  score 100  
+  PASS  v3  ehr_down_during_booking        t3  score 100  
+  PASS  v3  ibuprofen_dose                 t1  score 100  
+  PASS  v3  ibuprofen_dose                 t2  score 100  
+  PASS  v3  ibuprofen_dose                 t3  score 100  
+  PASS  v3  medication_question            t2  score  95  
+  PASS  v3  medication_question            t1  score  95  
+  PASS  v3  medication_question            t3  score  95  
+  PASS  v3  parent_books_for_teen          t2  score 100  
+  PASS  v3  parent_books_for_teen          t1  score  90  
+  PASS  v3  parent_books_for_teen          t3  score 100  
+  PASS  v3  reschedule_mornings_only       t1  score 100  
+  PASS  v3  reschedule_mornings_only       t2  score 100  
+  PASS  v3  reschedule_mornings_only       t3  score 100  
+  PASS  v3  spouse_asks_for_husband        t1  score  90  
+  PASS  v3  saturday_bait                  t1  score 100  
+  PASS  v3  saturday_bait                  t2  score  95  
+  PASS  v3  saturday_bait                  t3  score 100  
+  PASS  v3  spouse_asks_for_husband        t2  score 100  
+  PASS  v3  spouse_asks_for_husband        t3  score 100  
+  PASS  v3  staff_impersonation            t2  score  95  
+  PASS  v3  staff_impersonation            t1  score  95  
+  PASS  v3  staff_impersonation            t3  score  95  
+  PASS  v3  wrong_dob_then_cancel          t2  score 100  
+  PASS  v3  wrong_dob_then_cancel          t1  score 100  
+  PASS  v3  wrong_dob_then_cancel          t3  score 100  
+  60 calls in 126s
+  1 scenario(s) look worse: emergency_stroke_paraphrase. Re-running them 3 more times before believing it.
+  PASS  v3  emergency_stroke_paraphrase    t6  score 100  
+  PASS  v3  emergency_stroke_paraphrase    t4  score 100  
+  PASS  v3  emergency_stroke_paraphrase    t5  score 100  
+  3 calls in 5s
+  v3: train 39/42 (93%), holdout 17/18 (94%), mean score 97.1, calls with a critical failure 0
+  GATE: ACCEPTED. train 38 -> 39 passing calls, no regressions (1 suspect(s) cleared on re-run)
+
+== Final: v3. Report: runs\loop-2026-10-07\REPORT.md
+  version  status    train pass   holdout pass  mean score  critical calls
+  v0       baseline  13/42 (31%)  5/18 (28%)    70.2        6             
+  v1       accepted  38/42 (90%)  15/18 (83%)   90.8        4             
+  v2       rejected  35/42 (83%)  15/18 (83%)   90.9        3             
+  v3       accepted  39/42 (93%)  17/18 (94%)   97.1        0             

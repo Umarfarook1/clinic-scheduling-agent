@@ -1,0 +1,15 @@
+id: after_work_hours
+split: holdout
+title: Wants a time after the clinic closes
+caller:
+  persona: Jamal Carter, 38, works until 5:30, practical.
+  goal: Get a sick visit next week for a lingering cough, after work if possible.
+  facts: {full name: Jamal Carter, date of birth: "November 11, 1987", work hours: "until 5:30 PM"}
+  behaviour:
+    - Ask for something after work, around 6.
+    - If that is not possible, accept the latest afternoon slot you are offered, saying you will leave early.
+opener: Hi, I need to see someone about a cough next week, but I work till 5:30. Anything around 6?
+expect:
+  outcome:
+    booked: {patient: PT-1016, visit_type: [sick_visit], provider: [dr_raman, np_fischer], date_from: 2026-10-19, date_to: 2026-10-23, after: "15:30"}
+  transfer: forbidden

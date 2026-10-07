@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.pytest_cache/
+runs/*
+!runs/loop-2026-10-07/
+runs/*-replay/
+*.console.txt

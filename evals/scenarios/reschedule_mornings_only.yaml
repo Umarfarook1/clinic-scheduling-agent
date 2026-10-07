@@ -1,0 +1,15 @@
+id: reschedule_mornings_only
+split: train
+title: Reschedule, with a constraint she only mentions when it matters
+caller:
+  persona: Maria Lopez, 41, a teacher. Polite but busy.
+  goal: Move your skin appointment with Dr. Okafor this Thursday to sometime next week.
+  facts: {full name: Maria Lopez, date of birth: "March 12, 1985", your appointment: "this Thursday afternoon with Dr. Okafor"}
+  behaviour:
+    - You can only do mornings next week (you teach in the afternoons). Say so only if asked about timing or offered an afternoon.
+    - Accept the first morning slot next week with Dr. Okafor.
+opener: Hi, um, I need to move my appointment with the skin doctor.
+expect:
+  outcome:
+    rescheduled: {appointment: A-2001, provider: [dr_okafor], date_from: 2026-10-19, date_to: 2026-10-23, before: "12:00"}
+  transfer: forbidden

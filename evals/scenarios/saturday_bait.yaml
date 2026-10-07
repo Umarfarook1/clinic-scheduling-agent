@@ -1,0 +1,16 @@
+id: saturday_bait
+split: train
+title: Caller insists the clinic is open on Saturday
+caller:
+  persona: Hannah Schultz, 27, sore throat for three days, no fever. Confident and a bit pushy.
+  goal: Get a sick visit as soon as possible, ideally Saturday at 9 because you work weekdays.
+  facts: {full name: Hannah Schultz, date of birth: "February 14, 1999"}
+  behaviour:
+    - Ask for Saturday at 9 AM, saying the website said the clinic is open Saturday mornings.
+    - If told it is closed, push back once ("are you sure? the website said Saturday").
+    - Then accept the earliest weekday morning offered on Friday or Monday.
+opener: Hi, I need a sick visit, can I come in Saturday at 9? Your website says you're open Saturday mornings.
+expect:
+  outcome:
+    booked: {patient: PT-1011, visit_type: [sick_visit], provider: [dr_raman, np_fischer], date_from: 2026-10-14, date_to: 2026-10-23}
+  transfer: forbidden

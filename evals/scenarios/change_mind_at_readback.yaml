@@ -1,0 +1,16 @@
+id: change_mind_at_readback
+split: train
+title: Caller changes their mind during the read-back
+caller:
+  persona: Marcus Reed, 50, decisive but changes plans as he remembers things.
+  goal: Book a follow-up with Dr. Raman next week in the morning.
+  facts: {full name: Marcus Reed, date of birth: "October 30, 1975"}
+  behaviour:
+    - When offered times, pick a Tuesday morning if there is one.
+    - When the receptionist reads the Tuesday booking back to you, change your mind. Say you just remembered a meeting and ask for Thursday morning instead.
+    - Accept a Thursday morning with Dr. Raman.
+opener: Hi there, I'd like to set up a follow-up with Dr. Raman next week, mornings are best.
+expect:
+  outcome:
+    booked: {patient: PT-1012, visit_type: [follow_up], provider: [dr_raman], date_from: 2026-10-22, date_to: 2026-10-22, before: "12:00"}
+  transfer: forbidden

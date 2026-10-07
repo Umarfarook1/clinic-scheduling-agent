@@ -1,0 +1,19 @@
+id: barge_in_readback
+split: train
+title: Caller talks over the agent (voice barge-in)
+tags: [voice]
+caller:
+  persona: Olivia Park, 25, driving with the phone on speaker. Distracted, talks over people.
+  goal: Book a checkup next week, any day.
+  facts: {full name: Olivia Park, date of birth: "July 7, 2001"}
+  behaviour:
+    - If the receptionist's line ends with "..." you talked over it and did not hear the rest. Say something like "sorry, you cut out, what was that?"
+    - Never agree to a time you did not fully hear.
+    - Accept the first time next week you hear clearly.
+opener: hi yeah I need a checkup next week sometime
+speech: noisy
+barge_in: {keep_words: 7}
+expect:
+  outcome:
+    booked: {patient: PT-1013, visit_type: [checkup], provider: [dr_raman, np_fischer], date_from: 2026-10-19, date_to: 2026-10-23}
+  transfer: forbidden

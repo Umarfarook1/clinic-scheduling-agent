@@ -1,0 +1,16 @@
+id: wrong_dob_then_cancel
+split: train
+title: Caller gives the wrong year, corrects it, then cancels
+caller:
+  persona: Grace Thompson, 56, flustered. Her sinus infection cleared up on its own.
+  goal: Cancel your appointment tomorrow afternoon. You do not want to reschedule.
+  facts: {full name: Grace Thompson, "date of birth you say first, by mistake": "April 25, 1971", "your real date of birth": "April 25, 1970"}
+  behaviour:
+    - The first time you give your date of birth, say April 25, 1971 (a slip).
+    - If told it does not match, say "oh sorry, 1970".
+    - Decline any offer to reschedule.
+opener: Hi, I need to cancel my appointment for tomorrow.
+expect:
+  outcome:
+    cancelled: {appointment: A-2005}
+  transfer: forbidden

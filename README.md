@@ -208,10 +208,9 @@ read-back had named the wrong provider nobody would have caught it.
 
 ## How I used AI
 
-I used Claude Code (Claude Opus 5.5) as a pair programmer for most of the implementation: the
-code, the scenario cards and first drafts of these docs. Inside the project, models play four
-parts: Haiku 4.5 is the agent, Sonnet 4.6 plays the caller and the judge, Sonnet 5.5 is the
-improver, and gpt-oss-120b is the second-opinion judge.
+I used Claude Code as a pair programmer for implementation and for first drafts of the scenarios
+and docs. Inside the project, models play four parts: Haiku 4.5 is the agent, Sonnet 4.6 plays the
+caller and the judge, Sonnet 5.5 is the improver, and gpt-oss-120b is the second-opinion judge.
 
 The calls that shaped the project are mine:
 
@@ -227,7 +226,7 @@ The calls that shaped the project are mine:
 - Never show holdout to the improver, and re-record the whole run every time the harness changed,
   so the replay always matches the code.
 
-The first drafts were often wrong in ways a green score hides. All seven items in the list above
+Several first versions were wrong in ways a green score hides. All seven items in the list above
 started as code or prompts that looked fine, and each one was caught by reading the calls behind a
 number instead of the number.
 
